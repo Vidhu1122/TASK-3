@@ -1,0 +1,7 @@
+{% extends 'base.html' %}
+{% block content %}
+<h3>Welcome, {{ request.user.username }}</h3>
+<p>Role: {{ request.user.profile.role }}</p>
+<a href="{% url 'create_course' %}" class="btn btn-success">Create Course</a>
+<a href="{% url 'course_list' %}" class="btn btn-secondary">View Courses</a>
+{% endblock %}
