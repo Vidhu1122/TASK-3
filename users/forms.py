@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 from .models import Profile
+from django.contrib.auth.forms import AuthenticationForm
 
 class UserRegisterForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
@@ -18,4 +19,8 @@ class UserRegisterForm(forms.ModelForm):
             profile = Profile.objects.get(user=user)
             profile.role = self.cleaned_data['role']
             profile.save()
-        return user
+            return user
+    
+    class CustomLoginForm(AuthenticationForm):
+        username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+        password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))

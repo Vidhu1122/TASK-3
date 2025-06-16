@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ course.title }} - Details{% endblock %}
+
+{% block content %}
+  <div class="card">
+    <img src="{{ course.image.url }}" class="card-img-top" alt="{{ course.title }}" style="max-height: 300px; object-fit: cover;">
+    <div class="card-body">
+      <h3 class="card-title">{{ course.title }}</h3>
+      <p class="card-text">{{ course.description }}</p>
+      <p><strong>Instructor:</strong> {{ course.instructor }}</p>
+      <p><strong>Price:</strong> ₹{{ course.price }}</p>
+    </div>
+  </div>
+{% endblock %}

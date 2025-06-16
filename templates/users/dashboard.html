@@ -1,7 +1,30 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% block title %}Dashboard | LearnXz{% endblock %}
+
 {% block content %}
-<h3>Welcome, {{ request.user.username }}</h3>
-<p>Role: {{ request.user.profile.role }}</p>
-<a href="{% url 'create_course' %}" class="btn btn-success">Create Course</a>
-<a href="{% url 'course_list' %}" class="btn btn-secondary">View Courses</a>
+<h2 class="mb-4">Welcome, {{ user.username }}!</h2>
+
+{% if courses %}
+  <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+    {% for course in courses %}
+      <div class="col">
+        <div class="card h-100 shadow-sm">
+          <img src="{{ course.image.url }}" class="card-img-top" alt="{{ course.title }}">
+          <div class="card-body">
+            <h5 class="card-title">{{ course.title }}</h5>
+            <p class="card-text text-muted">{{ course.description|truncatechars:100 }}</p>
+          </div>
+          <div class="card-footer bg-white border-0 d-flex justify-content-between align-items-center">
+            <a href="{% url 'course_detail' course.id %}" class="btn btn-outline-primary btn-sm">View</a>
+            <small class="text-muted">Instructor: {{ course.instructor.username }}</small>
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </div>
+{% else %}
+  <div class="alert alert-info text-center">
+    No courses available at the moment.
+  </div>
+{% endif %}
 {% endblock %}
