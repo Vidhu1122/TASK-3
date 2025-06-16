@@ -1,9 +1,20 @@
-{% extends 'base.html' %}
+{% extends "base.html" %}
+{% block title %}Add Course | LearnXz{% endblock %}
+
 {% block content %}
-<h2>Create a Course</h2>
-<form method="POST" enctype="multipart/form-data">
+<div class="row justify-content-center">
+  <div class="col-md-6">
+    <div class="card mt-4 shadow-sm">
+      <div class="card-body">
+        <h4 class="mb-4">Add New Course</h4>
+<form method="post" enctype="multipart/form-data">
   {% csrf_token %}
   {{ form.as_p }}
-  <button class="btn btn-primary">Create</button>
+  <button type="submit" class="btn btn-primary">Create Course</button>
 </form>
+
+      </div>
+    </div>
+  </div>
+</div>
 {% endblock %}

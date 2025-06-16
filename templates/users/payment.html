@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block title %}Payment | LearnXz{% endblock %}
+
+{% block content %}
+<div class="text-center mt-5">
+  <h2>Enroll in {{ course.title }}</h2>
+  <p><strong>Amount:</strong> ₹{{ course.price }}</p>
+  <p>This is a dummy payment page. No real transactions happen.</p>
+  <a href="{% url 'dashboard' %}" class="btn btn-success mt-3">Confirm & Go to Dashboard</a>
+</div>
+{% endblock %}
