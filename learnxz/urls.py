@@ -4,11 +4,13 @@ from django.conf import settings
 from users.views import home_view
 from django.conf.urls.static import static
 from django.contrib.auth import views as auth_views
-from django.views.generic import RedirectView
-
+from django.conf import settings
 
 
 urlpatterns = [
+    path('', include('users.urls')),
+    path('', include('courses.urls')),
+
     path('admin/', admin.site.urls),
     path('', home_view, name='home'),
     path('home/', include('users.urls')),
@@ -16,7 +18,8 @@ urlpatterns = [
     path('logout/', auth_views.LogoutView.as_view(), name='logout'),
 
     path('dashboard/', include('courses.urls')),
-]
+    path('courses/', include('courses.urls')),
+]+ static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
-if settings.DEBUG:
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+# if settings.DEBUG:
+#     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

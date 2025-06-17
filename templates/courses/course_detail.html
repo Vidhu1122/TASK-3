@@ -1,15 +1,17 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ course.title }} - Details{% endblock %}
+{% block title %}{{ course.title }} | LearnXz{% endblock %}
 
 {% block content %}
   <div class="card">
-    <img src="{{ course.image.url }}" class="card-img-top" alt="{{ course.title }}" style="max-height: 300px; object-fit: cover;">
+    <img src="{{ course.image.url }}" class="card-img-top" alt="{{ course.title }}">
     <div class="card-body">
       <h3 class="card-title">{{ course.title }}</h3>
       <p class="card-text">{{ course.description }}</p>
-      <p><strong>Instructor:</strong> {{ course.instructor }}</p>
       <p><strong>Price:</strong> ₹{{ course.price }}</p>
+      {% if user.role == 'student' %}
+        <a href="#" class="btn btn-primary">Buy Now</a> <!-- dummy payment can go here -->
+      {% endif %}
     </div>
   </div>
 {% endblock %}

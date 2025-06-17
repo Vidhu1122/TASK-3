@@ -1,10 +1,12 @@
 from django.urls import path
-from . import views
+from .views import create_course
+from .views import dashboard_view, create_course, course_detail
+from django.urls import path
+from .views import course_detail 
+
 
 urlpatterns = [
-    path('create/', views.create_course_view, name='create_course'),
-    path('<int:course_id>/', views.course_detail_view, name='course_detail'),
+    path('dashboard/', dashboard_view, name='dashboard'),
+    path('dashboard/create/', create_course, name='create_course'),
+    path('<int:course_id>/', course_detail, name='course_detail'),
 ]
-
-# This file defines the URL patterns for the courses app.
-# It includes a single URL pattern that maps to the course detail view. 

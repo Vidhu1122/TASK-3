@@ -1,4 +1,5 @@
 {% extends "base.html" %}
+{% load static %}
 {% block title %}Dashboard | LearnXz{% endblock %}
 
 {% block content %}
@@ -9,7 +10,12 @@
     {% for course in courses %}
       <div class="col">
         <div class="card h-100 shadow-sm">
-          <img src="{{ course.image.url }}" class="card-img-top" alt="{{ course.title }}">
+          {% if course.image %}
+            <img src="{{ course.image.url }}" class="card-img-top" alt="{{ course.title }}">
+          {% else %}
+            <img src="{% static 'default-course.jpg' %}" class="card-img-top" alt="Default Course Image">
+          {% endif %}
+
           <div class="card-body">
             <h5 class="card-title">{{ course.title }}</h5>
             <p class="card-text text-muted">{{ course.description|truncatechars:100 }}</p>
