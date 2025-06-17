@@ -1,13 +1,13 @@
 from django import forms
-from django.contrib.auth.models import User
-from .models import Profile
+from django.contrib.auth.forms import AuthenticationForm
+from users.models import CustomUser
 
 class UserRegisterForm(forms.ModelForm):
     password = forms.CharField(widget=forms.PasswordInput())
-    role = forms.ChoiceField(choices=Profile.ROLE_CHOICES)
+    role = forms.ChoiceField(choices=CustomUser.ROLE_CHOICES)
 
     class Meta:
-        model = User
+        model = CustomUser
         fields = ['username', 'email', 'password', 'role']
 
     def save(self, commit=True):
@@ -15,7 +15,8 @@ class UserRegisterForm(forms.ModelForm):
         user.set_password(self.cleaned_data['password'])
         if commit:
             user.save()
-            profile = Profile.objects.get(user=user)
-            profile.role = self.cleaned_data['role']
-            profile.save()
         return user
+
+class CustomLoginForm(AuthenticationForm):
+    username = forms.CharField(widget=forms.TextInput(attrs={'class': 'form-control'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class': 'form-control'}))
