@@ -12,11 +12,7 @@ class Course(models.Model):
         on_delete=models.CASCADE,
         related_name='instructed_courses'
     )
-    students = models.ManyToManyField(
-        settings.AUTH_USER_MODEL,
-        related_name='enrolled_courses',
-        blank=True
-    )
+    students = models.ManyToManyField(settings.AUTH_USER_MODEL, related_name='enrolled_courses', blank=True)
 
     def __str__(self):
         return self.title

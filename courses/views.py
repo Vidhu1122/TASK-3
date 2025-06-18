@@ -17,7 +17,25 @@ def create_course(request):
         form = CourseForm()
     return render(request, 'courses/create_course.html', {'form': form})
 
+@login_required
+def edit_course(request, course_id):
+    course = get_object_or_404(Course, id=course_id, instructor=request.user)
+    if request.method == 'POST':
+        form = CourseForm(request.POST, request.FILES, instance=course)
+        if form.is_valid():
+            form.save()
+            return redirect('dashboard')
+    else:
+        form = CourseForm(instance=course)
+    return render(request, 'courses/course_form.html', {'form': form, 'action': 'Edit'})
 
+@login_required
+def delete_course(request, course_id):
+    course = get_object_or_404(Course, id=course_id, instructor=request.user)
+    if request.method == 'POST':
+        course.delete()
+        return redirect('dashboard')
+    return render(request, 'courses/confirm_delete.html', {'course': course})
 
 def course_detail(request, course_id):
     course = get_object_or_404(Course, id=course_id)

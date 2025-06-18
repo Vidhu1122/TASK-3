@@ -1,11 +1,18 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+
 {% block title %}Payment | LearnXz{% endblock %}
 
 {% block content %}
-<div class="text-center mt-5">
-  <h2>Enroll in {{ course.title }}</h2>
-  <p><strong>Amount:</strong> ₹{{ course.price }}</p>
-  <p>This is a dummy payment page. No real transactions happen.</p>
-  <a href="{% url 'dashboard' %}" class="btn btn-success mt-3">Confirm & Go to Dashboard</a>
-</div>
+  <div class="card mx-auto mt-5" style="max-width: 500px;">
+    <div class="card-body">
+      <h4 class="card-title">Buy: {{ course.title }}</h4>
+      <p class="card-text">Amount: ₹{{ course.price }}</p>
+      <form method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-primary w-100">Confirm Payment</button>
+      </form>
+    </div>
+  </div>
 {% endblock %}
+<!-- This template is used to display the payment page for a course. -->
+<!-- It shows the course title and price, and includes a form to confirm the payment. -->
