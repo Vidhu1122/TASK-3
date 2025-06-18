@@ -1,42 +1,59 @@
 {% extends 'base.html' %}
 {% load static %}
 {% block content %}
+<div class="container">
   <div class="d-flex justify-content-between align-items-center mb-3">
-    <h2 class="mb-4">Dashboard</h2>
-
+    <div>
+      <h4 class="mb-1">Welcome, {{ user.username }}!</h4>
+      <p class="text-muted mb-0">Role: <strong>{{ user.role|title }}</strong></p>
+    </div>
     {% if user.role == 'instructor' %}
-      <a href="{% url 'create_course' %}" class="btn btn-success">Add Course</a>
+      <a href="{% url 'create_course' %}" class="btn btn-sm btn-success">+ Add Course</a>
     {% endif %}
   </div>
 
   {% if courses %}
     <div class="row">
       {% for course in courses %}
-        <div class="col-md-4 mb-4">
-          <div class="card h-100 shadow-sm">
+        <div class="col-md-4 mb-3">
+          <div class="card h-100 shadow-sm border-0">
             {% if course.image %}
-              <img src="{{ course.image.url }}" class="card-img-top" alt="{{ course.title }}">
+              <img src="{{ course.image.url }}" class="card-img-top" alt="{{ course.title }}" style="height: 160px; object-fit: cover;">
             {% else %}
-              <img src="{% static 'default-course.jpg' %}" class="card-img-top" alt="Default image">
+              <img src="{% static 'default-course.jpg' %}" class="card-img-top" alt="Default image" style="height: 160px; object-fit: cover;">
             {% endif %}
-            <div class="card-body">
-              <h5 class="card-title">{{ course.title }}</h5>
-              <p class="card-text">{{ course.description|truncatewords:20 }}</p>
-              <p class="text-muted"><strong>₹{{ course.price }}</strong></p>
+
+            <div class="card-body py-2 px-3">
+              <h6 class="card-title mb-1">{{ course.title }}</h6>
+              <p class="card-text small text-muted mb-1">{{ course.description|truncatewords:15 }}</p>
+              <p class="text-muted mb-1"><strong>₹{{ course.price }}</strong></p>
               {% if course.video %}
-  <video width="100%" height="auto" controls>
-    <source src="{{ course.video.url }}" type="video/mp4">
-    Your browser does not support the video tag.
-  </video>
-{% else %}
-  <p><em>No video available for this course.</em></p>
-{% endif %}
+                <video width="100%" height="auto" controls class="mt-2">
+                  <source src="{{ course.video.url }}" type="video/mp4">
+                  Your browser does not support the video tag.
+                </video>
+              {% else %}
+                <p class="text-muted small mb-0"><em>No video available</em></p>
+              {% endif %}
+              {% if user.role == 'student' and user not in course.students.all %}
+                <a href="{% url 'dummy_payment' course.id %}" class="btn btn-sm btn-outline-success">Buy Now</a>
+              {% elif user in course.students.all %}
+                <span class="badge bg-success">Enrolled</span>
+              {% endif %}
             </div>
+
+            {% if user.role == 'instructor' %}
+              <div class="card-footer d-flex justify-content-between px-3 py-2 bg-light border-top">
+                <a href="{% url 'edit_course' course.id %}" class="btn btn-sm btn-warning">Edit</a>
+                <a href="{% url 'delete_course' course.id %}" class="btn btn-sm btn-danger">Delete</a>
+              </div>
+            {% endif %}
           </div>
         </div>
       {% endfor %}
     </div>
   {% else %}
-    <p>No courses found.</p>
+    <div class="alert alert-info text-center">No courses found.</div>
   {% endif %}
+</div>
 {% endblock %}

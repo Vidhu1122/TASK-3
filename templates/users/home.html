@@ -1,9 +1,109 @@
-{% extends 'base.html' %}
-{% block title %}Home{% endblock %}
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Welcome to LearnXz{% endblock %}
+
 {% block content %}
-<div class="text-center">
-  <h1 class="display-5">Welcome to LearnXz LMS</h1>
-  <p class="lead">Learn at your own pace with our top-rated courses.</p>
-  <a href="{% url 'login' %}" class="btn btn-primary btn-lg">Get Started</a>
+<style>
+  .hero {
+    background: linear-gradient(rgba(0,0,0,0.4), rgba(0,0,0,0.6)), url('{% static "images/hero.jpg" %}') center/cover no-repeat;
+    color: white;
+    padding: 100px 20px;
+    text-align: center;
+    border-radius: 0 0 20px 20px;
+  }
+
+  .hero h1 {
+    font-size: 3rem;
+    font-weight: bold;
+  }
+
+  .hero p {
+    font-size: 1.25rem;
+    margin-top: 10px;
+  }
+
+  .section-title {
+    margin: 60px 0 30px;
+    font-weight: 600;
+  }
+
+  .feature-card {
+    border: none;
+    border-radius: 12px;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.1);
+    transition: transform 0.3s ease;
+  }
+
+  .feature-card:hover {
+    transform: translateY(-5px);
+  }
+
+  .feature-icon {
+    font-size: 2rem;
+    color: #28a745;
+  }
+
+  .cta {
+    background: #28a745;
+    color: white;
+    padding: 40px 20px;
+    border-radius: 20px;
+    text-align: center;
+    margin-top: 50px;
+  }
+
+  .cta h2 {
+    margin-bottom: 20px;
+  }
+
+  .cta a {
+    background: white;
+    color: #28a745;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-weight: bold;
+    text-decoration: none;
+  }
+
+  .cta a:hover {
+    background: #f8f9fa;
+  }
+</style>
+
+<div class="hero">
+  <h1>Welcome to LearnXz</h1>
+  <p>Your Gateway to Quality Online Learning</p>
+</div>
+
+<div class="container">
+  <h2 class="text-center section-title">Why Choose LearnXz?</h2>
+  <div class="row text-center">
+    <div class="col-md-4 mb-4">
+      <div class="card feature-card p-4">
+        <div class="feature-icon mb-3">🎓</div>
+        <h5>Expert Instructors</h5>
+        <p>Learn from industry professionals with real-world experience.</p>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card feature-card p-4">
+        <div class="feature-icon mb-3">📚</div>
+        <h5>Wide Course Variety</h5>
+        <p>From tech to design, explore a growing library of courses.</p>
+      </div>
+    </div>
+    <div class="col-md-4 mb-4">
+      <div class="card feature-card p-4">
+        <div class="feature-icon mb-3">📈</div>
+        <h5>Track Progress</h5>
+        <p>Resume where you left off and track your learning journey.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="cta mt-5">
+    <h2>Ready to start learning?</h2>
+    <a href="{% url 'register' %}">Create Your Free Account</a>
+  </div>
 </div>
 {% endblock %}
