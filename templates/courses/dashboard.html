@@ -1,5 +1,6 @@
 {% extends 'base.html' %}
 {% load static %}
+
 {% block content %}
 <div class="container">
   <div class="d-flex justify-content-between align-items-center mb-3">
@@ -27,14 +28,16 @@
               <h6 class="card-title mb-1">{{ course.title }}</h6>
               <p class="card-text small text-muted mb-1">{{ course.description|truncatewords:15 }}</p>
               <p class="text-muted mb-1"><strong>₹{{ course.price }}</strong></p>
+
               {% if course.video %}
-                <video width="100%" height="auto" controls class="mt-2">
+                <video width="100%" height="auto" controls class="mt-2" data-course-id="{{ course.id }}">
                   <source src="{{ course.video.url }}" type="video/mp4">
                   Your browser does not support the video tag.
                 </video>
               {% else %}
                 <p class="text-muted small mb-0"><em>No video available</em></p>
               {% endif %}
+
               {% if user.role == 'student' and user not in course.students.all %}
                 <a href="{% url 'dummy_payment' course.id %}" class="btn btn-sm btn-outline-success">Buy Now</a>
               {% elif user in course.students.all %}
@@ -56,4 +59,45 @@
     <div class="alert alert-info text-center">No courses found.</div>
   {% endif %}
 </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  const videos = document.querySelectorAll("video");
+
+  videos.forEach((video) => {
+    const courseId = video.getAttribute("data-course-id");
+
+    // Fetch saved progress
+    fetch(`/users/get_progress/?course_id=${courseId}`)
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.progress) {
+          video.currentTime = data.progress;
+        }
+      });
+
+    // Pause all other videos when one plays
+    video.addEventListener("play", () => {
+      videos.forEach((v) => {
+        if (v !== video) v.pause();
+      });
+    });
+
+    // Save progress on pause
+    video.addEventListener("pause", () => {
+      fetch("/users/update_progress/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "X-CSRFToken": "{{ csrf_token }}"
+        },
+        body: JSON.stringify({
+          course_id: courseId,
+          progress: video.currentTime
+        })
+      });
+    });
+  });
+});
+</script>
 {% endblock %}

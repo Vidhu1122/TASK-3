@@ -6,6 +6,7 @@ from .forms import UserRegisterForm
 from django.http import JsonResponse
 from django.views.decorators.csrf import csrf_exempt
 from .models import VideoProgress
+from django.views.decorators.http import require_POST
 import json
 
 def home_view(request):
@@ -32,25 +33,31 @@ def dashboard_view(request):
 
 @csrf_exempt
 @login_required
-def save_progress(request, course_id):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        last_time = data.get('last_time')
+@require_POST
+def update_progress(request):
+    data = json.loads(request.body)
+    course_id = data.get("course_id")
+    progress = data.get("progress")
+    try:
         course = Course.objects.get(id=course_id)
-
-        progress, created = VideoProgress.objects.get_or_create(user=request.user, course=course)
-        progress.last_time = last_time
-        progress.save()
-        return JsonResponse({'status': 'success'})
+        VideoProgress.objects.update_or_create(
+            user=request.user,
+            course=course,
+            defaults={"progress": progress}
+        )
+        return JsonResponse({"status": "ok"})
+    except Course.DoesNotExist:
+        return JsonResponse({"error": "Course not found"}, status=404)
 
 @login_required
-def get_progress(request, course_id):
-    course = Course.objects.get(id=course_id)
+def get_progress(request):
+    course_id = request.GET.get("course_id")
     try:
-        progress = VideoProgress.objects.get(user=request.user, course=course)
-        return JsonResponse({'last_time': progress.last_time})
-    except VideoProgress.DoesNotExist:
-        return JsonResponse({'last_time': 0.0})
+        course = Course.objects.get(id=course_id)
+        vp = VideoProgress.objects.get(user=request.user, course=course)
+        return JsonResponse({"progress": vp.progress})
+    except (Course.DoesNotExist, VideoProgress.DoesNotExist):
+        return JsonResponse({"progress": 0})
 
 
 @login_required

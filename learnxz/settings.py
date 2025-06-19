@@ -40,6 +40,8 @@ INSTALLED_APPS = [
     'courses',
     'users.apps.UsersConfig',
     'crispy_forms',
+    'rest_framework',
+    'corsheaders',  # Optional for frontend API requests
 ]
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -52,7 +54,10 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    "corsheaders.middleware.CorsMiddleware",
 ]
+
+CORS_ALLOW_ALL_ORIGINS = True  # Or set specific origin
 
 ROOT_URLCONF = 'learnxz.urls'
 
